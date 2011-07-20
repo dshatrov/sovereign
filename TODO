@@ -1,0 +1,6 @@
+e2initrd_helper ликуентся с /lib/ , т.е. игнорирует префикс (пакет e2fsprogs).
+
+---
+
+* Don't build g++ on the first gcc pass.
+

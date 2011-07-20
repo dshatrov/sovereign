@@ -1,0 +1,79 @@
+body {
+	font-family: sans-serif;
+	background-image: url(img/bggrad.png);
+	background-repeat: repeat-y;
+	color: #000000;
+	background-color: #ffffff;
+	margin: 0;
+/*	margin-right: 0; */
+}
+
+body a:link    {
+	color: #bb7700
+}
+body a:active  {
+	color: #bb7700
+}
+body a:visited {
+	color: #bb7700
+}
+
+img {
+	vertical-align: middle;
+}
+
+.menu {
+}
+
+.menu a {
+	background-color: #fff8e4;
+	width: 100%;
+	display: block;
+	text-decoration: none;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.menu a:hover {
+	background-color: #ff9900;
+/*	color: #ffffcc; */
+	color: #fff8e4;
+}
+
+.last {
+	border-bottom: none
+}
+
+.sfbutton a {
+}
+
+.sfbutton a:hover {
+	color: #cc6600;
+}
+
+.hbar {
+/*	background-color: #ffee88; */
+	background-color: #ffdc7d;
+}
+
+.border-top {
+	border-top: 1px solid #ff9900;
+}
+.border-left {
+	border-left: 1px solid #ff9900;
+}
+.border-right {
+	border-right: 1px solid #ff9900;
+}
+.border-bottom {
+	border-bottom: 1px solid #ff9900;
+}
+
+.this a {
+/*	background-color: #fff9bb */
+	background-color: #ffecb9;
+}
+
+.nonlast {
+/*	border-bottom: 1px solid #ffdd00; */
+}
+

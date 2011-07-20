@@ -1,0 +1,7 @@
+gawk must be installed
+
+If you're running Ubuntu, make sure that 'gawk' package in installed in your
+system, otherwise glibc build will fail.
+
+gettext is required to build xlib
+

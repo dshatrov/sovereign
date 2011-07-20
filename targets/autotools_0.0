@@ -1,0 +1,8 @@
+# NAME			VERSION			FLAGS
+
+make			make-3.81
+libtool			libtool-2.2.6
+autoconf		autoconf-2.63
+automake		automake-1.10.2
+m4			m4-1.4.13
+

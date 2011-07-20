@@ -1,0 +1,12 @@
+diff -u gst-ffmpeg-0.10.11.2/ext/ffmpeg//gstffmpegcodecmap.c a/ext/ffmpeg//gstffmpegcodecmap.c
+--- gst-ffmpeg-0.10.11.2/ext/ffmpeg//gstffmpegcodecmap.c	2011-06-29 21:10:39.595284415 +0000
++++ a/ext/ffmpeg//gstffmpegcodecmap.c	2011-06-29 21:10:52.245284410 +0000
+@@ -451,7 +451,7 @@
+         maxchannels = 8;
+         break;
+       default:
+-        break;
++        maxchannels = 2;
+     }
+ 
+     if (maxchannels == 1)

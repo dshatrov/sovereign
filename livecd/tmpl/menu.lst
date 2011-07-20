@@ -1,0 +1,33 @@
+default 0
+timeout 3
+
+title Test LiveCD
+kernel  /boot/image-2.6.36.2 root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz kstack=99 vga=0x0f01 ramdisk_size=128000
+initrd  /boot/initrd.gz
+boot
+
+#title   Sovereign LiveCD
+#kernel  /boot/image-2.6.24.4 root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz kstack=99 vga=0x0f01 ramdisk_size=128000
+#initrd  /boot/initrd.gz
+#boot
+
+#title   MyNC Demo
+#kernel  /boot/image-2.6.19-mync root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz kstack=99 vga=0x0f01 nosep lapic
+#initrd  /boot/initrd.gz
+#boot
+
+#title   MyNC Demo (universal VESA video driver, 800x600 pixels)
+#kernel  /boot/image-2.6.19-mync root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz kstack=99 vga=0x0f01 nosep lapic mync_vesa
+#initrd  /boot/initrd.gz
+#boot
+
+#title   MyNC Demo
+#kernel  /boot/image-2.6.16.19-rti-pf root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz
+#initrd  /boot/initrd.gz
+#boot
+
+#title   MyNC Demo (universal VESA video driver, 800x600 pixels)
+#kernel  /boot/image-2.6.16.19-rti-pf root=/dev/ram0 init=/linuxrc ro initrd=/boot/initrd.gz mync_vesa
+#initrd  /boot/initrd.gz
+#boot
+

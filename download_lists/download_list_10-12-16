@@ -1,0 +1,21 @@
+linux-headers		http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.36.2.tar.gz
+
+glibc			http://ftp.gnu.org/gnu/glibc/glibc-2.12.2.tar.gz
+glibc			http://www.linuxfromscratch.org/patches/downloads/glibc/glibc-2.12.2-gcc_fix-1.patch
+
+binutils		http://ftp.gnu.org/gnu/binutils/binutils-2.21.tar.gz
+
+zlib			http://www.zlib.net/zlib-1.2.5.tar.gz
+bzip2			http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+
+ncurses			http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.7.tar.gz
+coreutils		http://ftp.gnu.org/gnu/coreutils/coreutils-8.7.tar.gz
+e2fsprogs		http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.41.13.tar.gz
+util-linux-ng		http://www.kernel.org/pub/linux/utils/util-linux-ng/v2.18/util-linux-ng-2.18.tar.gz
+module-init-tools	http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-3.12.tar.gz
+udev			http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev-165.tar.gz
+bash			http://ftp.gnu.org/gnu/bash/bash-4.1.tar.gz
+less			http://www.greenwoodsoftware.com/less/less-436.tar.gz
+
+iproute2		http://devresources.linuxfoundation.org/dev/iproute2/download/iproute2-2.6.35.tar.bz2
+

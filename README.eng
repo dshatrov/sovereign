@@ -1,0 +1,217 @@
+This document briefly describes what Sovereign is and how to use it.
+
+0. Introducing Sovereign
+    Greetings, fellow software engineer!
+    Welcome to the world of independence from the army of Linux distributions,
+    both the "bleeding edge" liberal flavors and "yet to be deprecated"
+    conservative ones.
+
+    Sovereign Development Framework is meant to provide you with a consistent
+    set of tools and libraries for your everyday software development.
+    With Sovereign, you can work on your projects peacefully, deferring
+    distribution-specific tasks closer to the stages of testing and packaging
+    the releases.
+
+    Technically, a deployed Sovereign framework is a set of tools and libraries
+    installed with a specific prefix ("/opt/sgn"). All you have to do to start
+    working with the new tools is to add "/opt/sgn" to the beginning of your
+    PATH. As the result, all the programs you compile will be linked with
+    libraries from /opt/sgn/lib, and you'll never have to worry about what is
+    there in distribution-specific /lib and /usr/lib.
+
+    If you construct your Sovereign system so that it includes all the
+    dependencies of your project, then no single library from /lib and /usr/lib
+    will be used at all, and Sovereign will be able to serve as a binary
+    portability layer for your programs, leaving Linux kernel ABI compatibility
+    as the only portability issue (and the kernel's ABI is known to be carefully
+    maintained).
+
+    Here's a list of possible problems that Sovereign is meant to solve for you:
+    * The tools and libraries in the distribution you currently use are becoming
+      old (lack features, provide deprecated APIs, have known bugs), and you
+      want to get newer versions without breaking the distribution.
+    * The distribution you have chosen has incorporated a buggy new version of
+      a tool/library that you need, and you want to "hold the horses" and keep
+      working with one of the previous versions without breaking you current
+      GNU/Linux installation.
+    * You need a tool/library which is not included in your current
+      distribution, and the needed software conflicts with installed versions of
+      some packages.
+    * You use quite a few computers for your everyday development (a couple
+      notebooks and desktops, your office workstation, a dozen nodes in
+      a testing cluster, etc.), and you don't bother maintaining coherent
+      GNU/Linux distros on all of the boxes.
+    * The type of Linux distribution you use is dictated by a corporate policy,
+      and you don't want to waste your time tuning it for your needs and
+      ensuring that everything works as expected.
+    * You've got a server system without much -devel packets installed (and
+      probably without gcc), and want to compile and run some programs without
+      installing any additional packets.
+
+    Got interested? Welcome onboard!
+
+1. Conventions used throughout this document
+    1.1. All sample commands are tabulated and prepended with a '$' character
+    to indicated that commands are to be executed manually from the console.
+    For example:
+	$ cd ~/'sovereign'
+    1.2. Sample commands are assumed to be executed from the directory where
+    Sovereign is unpacked on your system.
+    1.3. Most of the commands should be executed as root.
+    1.4. All sample commands are assumed to be executed in the GNU Bourne Again
+    SHell ("bash").
+
+2. Preparing the Sovereign build environment
+    1.1. Before executing any Sovereign scripts, you must set the 'SGN_HOME'
+    environment variable to the path where Sovereign is unpacked on your system:
+	$ cd ~/'sovereign'
+	$ export SGN_HOME=`pwd`
+
+    1.2. Before you start, prepare virtual ext2 images by executing
+    the following command:
+	$ ./sgn_init_images.sh
+    This will create two images: sgn_install.img (512 Mb), and sgn_system.img
+    (1024 Mb). Alternatively, you can create these images manually.
+
+    sgn_install.img is used during compilation of Sovereign binary packages (SGN
+    packages, or SGNs).
+
+    sgn_system.img is the target filesystem for your new Sovereign installation.
+    After the Sovereign system is ready, you'll be able to obtain your personal
+    development framework by mounting sgn_system.img at /opt/sgn like this:
+	$ mount -o loop,ro sgn_system.img /opt/sgn
+
+3. Building new Sovereign binary packages.
+    To build a new SGN package, you'll need:
+	1. A shell script for building the package.
+           Such scripts are located in the "depot" subdirectory,
+           like "depot/gcc/gcc-4.2.2.sh".
+	2. Source tarballs for the package in question and relevant patches.
+	   For example, to build gcc-4.2.2, you'll need two files:
+	   "src/gcc/gcc-4.2.2.tar.bz2" and
+	   "src/gcc/gcc-4.2.2_patches/gcc-4.2.2_dwarf2out_c_patch".
+        3. The tools required to build the package (like gettext, flex, make)
+	   should be installed on your host system. Sovereign maintains
+	   runtime independence from the host system, but currently provides
+	   only partial compile-time independence.
+    Once you have all the required items in place, building a new SGN is
+    as simple as executing the following command (building gcc-4.2.2
+    as an example):
+	$ ./sgn_make.sh depot/gcc/gcc-4.2.2.sh
+    After the script finishes, the new package will be put at
+    ./sgn/gcc-4.2.2.sgn.
+
+    Currently, SGN packages are just .tar.gz archives with a different
+    filename extension. To install such a package, go to the root of your
+    rw-mounted sgn_system.img and do "tar xzf gcc-4.2.2.sgn".
+    You can use a helper script to do just the same:
+	$ ./sgn_install.sh src/gcc-4.2.2.sgn
+    It is planned that later SGN packages will include more information about
+    the installation process like post-install scripts, so the "tar xzf" way
+    will stop working some day.
+
+4. Scripting the builds ("targets")
+    To free you from manually building the packages one by one, there's a helper
+    mechanism which allows you to prepare a list of the packages you want and
+    let Sovereign build it all automatically.
+
+    These package lists are plain text files located in the "targets"
+    subdirectory. Their format is really simple. Here's an example:
+	# NAME		VERSION			FLAGS
+	binutils	binutils-2.18
+	gcc		gcc-4.2.2
+	linux-headers	linux-headers-2.6.23.8
+	glibc		glibc-2.7
+	lfs-adjust	lfs-adjust-0.1-direct	script
+    It's a table, one row per package, three columns:
+	NAME    - Name of the package, the one without the version string.
+		  Build scripts for the package are located at "depot/${NAME}",
+		  and the sources are at "src/${NAME}".
+	VERSION - Versioned name of the package. The exact build script for
+		  the package is "depot/${NAME}/${VERSION}.sh".
+	FLAGS   - There's one possible flag currently: "script".
+		  If the "script" flag is specified, then the package's build
+		  shell script is considered an installation script, i.e. it
+		  is not used to build the package (the package does not require
+		  building at all), but to install the package.
+
+    To build a target ("targets/sovereign_0.0" as an example), execute
+    the following command:
+	$ ./sgn_target.sh targets/sovereign_0.0 make_install
+    This will cause every listed package to be compiled (as by running
+    ./sgn_make.sh) and then unpacked to sgn_system.img (as by running
+    ./sgn_install.sh).
+
+    If you already have all the necessary SGN packages in place and only want
+    to install them without recompiling, execute the following:
+	$ ./sgn_target.sh targets/sovereign_0.0 install
+
+    At last, if you want to rebuild the packages without installing them, run:
+	$ ./sgn_target.sh targets/sovereign_0.0 make
+    Note that the most fundamental packages (like binutils, gcc, glibc,
+    linux-headers) are very sensitive to the set of packages already installed
+    in sgn_system.img, and you may not be able to recompile them for
+    an already-deployed Sovereign system. In this case, you can create a clean
+    sgn_system.img, then create a target to rebuild the base SGN system, and
+    then install the rest of the packages (which are presumably already
+    compiled) with another target, using "./sgn_target.sh ... install".
+
+5. Using your new Sovereign system.
+    To start working with the Sovereign framework, mount sgn_system.img
+    to /opt/sgn:
+	$ mount -o loop,ro sgn_system.img /opt/sgn
+    Mounting the image is read-only prevents it from being accidentally
+    corrupted. If you're sure about your actions, your're free to mount it as
+    read-write.
+
+    The simplest way of substituting your host's tools with the tools from
+    /opt/sgn is to add "/opt/sgn" to the beginning of the PATH environment
+    variable:
+	$ export PATH="/opt/sgn:$PATH"
+
+    It is recommended to go a bit further though, and create a clean shell
+    environment to guarantee that your host system's environment doesn't sneak
+    in with its environment variables. To do this, create two files,
+    "sgn_shell.sh", and "sgn_bashrc". The proposed content of these files
+    is provided below.
+	** sgn_shell.sh **
+	    #!/bin/sh
+	    exec env -i SGN_PREFIX='/opt/sgn' HOME="$HOME" TERM=$TERM" \
+			DISPLAY="$DISPLAY" /bin/bash --rcfile sgn_bashrc
+
+	** sgn_bashrc **
+	    export LANG=en_US.UTF-8
+	    set +h
+	    export PS1='\[\033[1;32m\]\u \w$\[\033[0m\] '
+	    export PATH="/opt/sgn/bin:/bin:/usr/bin:/usr/local/bin"
+	    alias ls='ls --color=tty'
+
+    Make sgn_shell.sh executable:
+	$ chmod a+x ./sgn_shell.sh
+    To jump to the new Sovereign environment, execute:
+	$ ./sgn_shell.sh
+    We'll call the resulting environment the "sgn shell".
+
+    Switching to root from your sgn shell using 'su' will again clutter the
+    environment with host system's settings, so it is a good idea to write
+    a wrapper for 'su' to avoid that. Create a file /usr/local/bin/sgnsu
+    with the following contents:
+	** sgnsu **
+	    #!/bin/sh
+	    su -m -c "PS1=\"\[\033[1;31m\]\u \w$\[\033[0m\] \"   \
+		     HOME=\"/root\" PATH=\"$PATH:/opt/sgn/sbin\" \
+		     /bin/bash --norc"
+    Make sgnsu executable:
+	$ chmod a+x /usr/local/bin/sgnsu
+    Now you're able to safely switch to root by running 'sgnsu' instead of 'su'.
+
+6. Help enhance Sovereign
+    If you have compiled some custom Sovereign packages, like a major version of
+    Qt, or GNOME libraries, or maybe something relatively small yet relevant,
+    consider submitting your build scripts and target files to the main
+    Sovereign tree. This is a good way of collaborating by getting some free
+    testing of each other's build scripts and targets.
+
+    To submit a package or provide feedback on the existing ones,
+    send a mail to &lt;sgn-packages at sourceforge dot net&gt;.
+
