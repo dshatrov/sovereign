@@ -24,8 +24,8 @@ sgn_carefully cd "glibc-build"
 sgn_carefully sgn_byuser_script "echo \"CFLAGS += -U_FORTIFY_SOURCE -fno-stack-protector\" > configparms"
 #sgn_carefully sgn_byuser_script "../$PACKAGE_VERNAME/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-headers=\"$SGN_PREFIX/include\" --with-binutils=\"$SGN_PREFIX/bin\" libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
 # NOTE: Using system headers to build moment-0.2. This isn't good for livecd builds.
-sgn_carefully sgn_byuser_script "../$PACKAGE_VERNAME/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-binutils=\"$SGN_PREFIX/bin libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
-sgn_carefully sgn_byuser make -j 2
+sgn_carefully sgn_byuser_script "../$PACKAGE_VERNAME/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-binutils=\"$SGN_PREFIX/bin\" libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
+sgn_carefully sgn_byuser make $SGN_MAKEFLAGS
 
 sgn_carefully sgn_install_begin
 #sgn_carefully mkdir -p "$SGN_PREFIX/etc"

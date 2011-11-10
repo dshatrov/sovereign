@@ -1,10 +1,10 @@
 PACKAGE_NAME="binutils"
 PACKAGE_VERNAME="binutils-2.21.1"
 
-PACKAGE_ARCHIVE="${PACKAGE_VERNAME}.tar.gz"
+PACKAGE_ARCHIVE="${PACKAGE_VERNAME}.tar.bz2"
 PACKAGE_DIR="${PACKAGE_VERNAME}"
 
-sgn_carefully sgn_untar_gz
+sgn_carefully sgn_untar_bz2
 
 sgn_carefully cd "$SGN_BUILD_DIR"
 sgn_carefully sgn_byuser rm -rf "binutils-build"

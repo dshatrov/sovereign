@@ -184,11 +184,21 @@ sgn_ensure_directory "SGN_EMPTY"
 
 sgn_cleanup_dir "$SGN_EMPTY"
 
-SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
+# 32bit
+#SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
+#SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
 
-export CFLAGS="$CFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS"
-export CXXFLAGS="$CXXFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS"
-export LDFLAGS="$LDFLAGS -L$SGN_PREFIX/lib"
+# 64bit
+#SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath='$ORIGIN/../lib'"
+#SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+#SGN_LDFLAGS="-Wl,-rpath=$SGN_PREFIX/lib"
+
+SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+#SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+
+export CFLAGS="$CFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -O2 -g"
+export CXXFLAGS="$CXXFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -O2 -g"
+export LDFLAGS="$LDFLAGS -L$SGN_PREFIX/lib $SGN_LDFLAGS"
 
 # *** (SCRIPT ENDS HERE) ***
 

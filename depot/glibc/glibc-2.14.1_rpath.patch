@@ -1,0 +1,15 @@
+--- dynamic-link.h.old	2011-11-01 12:25:09.234594913 +0400
++++ dynamic-link.h	2011-11-01 12:23:29.234594873 +0400
+@@ -205,8 +205,10 @@
+   assert (info[DT_FLAGS] == NULL
+ 	  || info[DT_FLAGS]->d_un.d_val == DF_BIND_NOW);
+   /* Flags must not be set for ld.so.  */
+-  assert (info[DT_RUNPATH] == NULL);
+-  assert (info[DT_RPATH] == NULL);
++//  assert (info[DT_RUNPATH] == NULL);
++//  assert (info[DT_RPATH] == NULL);
++  info[DT_RUNPATH] = NULL;
++  info[DT_RPATH] = NULL;
+ #else
+   if (info[DT_FLAGS] != NULL)
+     {

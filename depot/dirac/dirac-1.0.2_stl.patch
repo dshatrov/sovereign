@@ -1,0 +1,22 @@
+--- quant_chooser.cpp.old	2011-11-01 14:35:03.444598021 +0400
++++ quant_chooser.cpp	2011-11-01 14:38:42.594598110 +0400
+@@ -340,7 +340,8 @@
+     {
+         for (int i=cblock.Xstart(); i<cblock.Xend(); ++i )
+         {
+-            if ( (std::abs(m_coeff_data[j][i])<<2) >= u_threshold )
++	    int a;
++            if ( ((a = std::abs(m_coeff_data[j][i]))<<2) >= u_threshold )
+                 can_skip = false;
+         }   
+     }
+@@ -355,7 +356,8 @@
+     {
+         for (int i=node.Xp() ; i<node.Xp()+node.Xl(); ++i)
+         {    
+-            val = std::max( val , std::abs(m_coeff_data[j][i]) );
++	    int a;
++            val = std::max( val , (a = std::abs(m_coeff_data[j][i])) );
+         }// i
+     }// j
+ 

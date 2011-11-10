@@ -7,7 +7,7 @@ PACKAGE_DIR="${PACKAGE_VERNAME}"
 sgn_carefully sgn_untar_bz2
 sgn_carefully sgn_builddir sgn_byuser tar xjf "$SGN_SRC_DIR/$PACKAGE_NAME/udev-config-20070731.tar.bz2"
 
-sgn_carefully sgn_builddir sgn_byuser make EXTRAS="`echo extras/*/`" -j 2
+sgn_carefully sgn_builddir sgn_byuser make EXTRAS="`echo extras/*/`" $SGN_MAKEFLAGS
 
 sgn_carefully sgn_install_begin
 sgn_carefully sgn_builddir make DESTDIR="$SGN_PREFIX/" EXTRAS="`echo extras/*/`" install

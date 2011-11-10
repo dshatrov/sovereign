@@ -2,7 +2,7 @@ build_package () {
     sgn_carefully sgn_untar_bz2 "$SOURCE_DIR/$PACKAGE_ARCHIVE"
 
     sgn_carefully sgn_builddir sgn_byuser ./configure --prefix="$SGN_PREFIX"
-    sgn_carefully sgn_builddir sgn_byuser make -j 2
+    sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS
 
     sgn_install_begin_nocleanup
     sgn_carefully sgn_builddir make install

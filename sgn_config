@@ -10,3 +10,5 @@ SGN_BUILD_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/build"
 SGN_SGN_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/sgn_packages"
 SGN_LIVECD_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/livecd"
 
+SGN_MAKEFLAGS="-j8"
+

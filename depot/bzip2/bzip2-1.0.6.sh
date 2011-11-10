@@ -6,7 +6,14 @@ PACKAGE_DIR="${PACKAGE_VERNAME}"
 
 sgn_carefully sgn_untar_gz
 
-sgn_carefully sgn_builddir sgn_byuser sh -c "cat Makefile-libbz2_so | sed 's/^\(CFLAGS=.*\)$/\1 -I\/opt\/moment\/include -Wl,--dynamic-linker=\/opt\/moment\/lib\/ld-linux.so.2 -Wl,-L\/opt\/moment\/lib/' > Makefile-libbz2_so.new && cp Makefile-libbz2_so.new Makefile-libbz2_so"
+echo "CFLAGS: $CFLAGS"
+
+#sgn_carefully sgn_builddir sgn_byuser sh -c "cat Makefile-libbz2_so | sed 's/^\(CFLAGS=.*\)$/\1 -I\/opt\/moment\/include -Wl,--dynamic-linker=\/opt\/moment\/lib\/ld-linux.so.2 -Wl,-L\/opt\/moment\/lib/' > Makefile-libbz2_so.new && cp Makefile-libbz2_so.new Makefile-libbz2_so"
+
+sgn_carefully sgn_builddir sgn_byuser sh -c "echo \"CFLAGS=$CFLAGS\"    > Makefile-libbz2_so.new"
+sgn_carefully sgn_builddir sgn_byuser sh -c "echo \"LDFLAGS=$LDFLAGS\" >> Makefile-libbz2_so.new"
+sgn_carefully sgn_builddir sgn_byuser sh -c "cat Makefile-libbz2_so | sed 's/^CFLAGS[ \t]*=/CFLAGS+=/' | sed 's/^LDFLAGS[ \t]*=/LDFLAGS+=/' | sed 's/ -shared/ -shared \\\$(LDFLAGS)/' | sed 's/-o bzip2-shared/-o bzip2-shared \\\$(LDFLAGS)/' >> Makefile-libbz2_so.new"
+sgn_carefully sgn_builddir sgn_byuser sh -c "mv Makefile-libbz2_so.new  Makefile-libbz2_so"
 
 sgn_carefully sgn_builddir sgn_byuser make -f Makefile-libbz2_so
 sgn_carefully sgn_builddir sgn_byuser make clean

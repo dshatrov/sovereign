@@ -14,7 +14,7 @@ echo "HOME: $SGN_PREFIX_ESCAPED"
 sgn_carefully sgn_builddir sgn_byuser sed -i "s/^INSTALL_DIR *=.*/INSTALL_DIR = \"$SGN_PREFIX_ESCAPED\"/" configs/default
 sgn_carefully sgn_builddir sgn_byuser sed -i "s/^DRI_DRIVER_INSTALL_DIR *=.*/DRI_DRIVER_INSTALL_DIR = \"$SGN_PREFIX_ESCAPED\\/X11R6\\/lib\\/modules\\/dri\"/" configs/default
 
-sgn_carefully sgn_builddir sgn_byuser make -j 2 linux-dri
+sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS linux-dri
 
 sgn_carefully sgn_install_begin
 sgn_carefully sgn_builddir make install

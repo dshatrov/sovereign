@@ -23,7 +23,7 @@ sgn_carefully pushd "linux-2.6.24.4"
 
 sgn_carefully sgn_byuser patch -p1 -i "../patch-2.6.24.4"
 sgn_carefully sgn_byuser cp "$SGN_SRC_DIR/$PACKAGE_NAME/config" "./.config"
-sgn_carefully sgn_byuser make -j 2
+sgn_carefully sgn_byuser make $SGN_MAKEFLAGS
 
 sgn_carefully sgn_install_begin
 sgn_carefully make modules_install INSTALL_MOD_PATH="$SGN_PREFIX"

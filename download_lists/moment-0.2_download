@@ -1,8 +1,10 @@
 linux-headers		http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.36.2.tar.gz
 
-binutils		http://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.gz
+binutils		http://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2
+binutils		http://ftp.gnu.org/gnu/binutils/binutils-2.21.1a.tar.bz2
 
 glibc			http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz
+glibc			http://ftp.gnu.org/gnu/glibc/glibc-2.14.1.tar.gz
 
 glibc			http://ftp.gnu.org/gnu/glibc/glibc-2.12.2.tar.gz
 glibc			http://www.linuxfromscratch.org/patches/downloads/glibc/glibc-2.12.2-gcc_fix-1.patch

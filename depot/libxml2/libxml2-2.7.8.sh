@@ -6,9 +6,11 @@ PACKAGE_DIR="${PACKAGE_VERNAME}"
 
 sgn_carefully sgn_untar_gz
 
-# libxml2.pc.in is broken: -lz must be added to ldflags.
+# libxml-2.0.pc.in is broken: -lz must be added to ldflags.
+sgn_carefully sgn_builddir sgn_byuser sh -c "cat libxml-2.0.pc.in | sed 's/^\(Libs:.*\)$/\1 -lz/' > libxml-2.0.pc.in.new && cp libxml-2.0.pc.in.new libxml-2.0.pc.in"
+
 sgn_carefully sgn_builddir sgn_byuser ./configure --prefix="$SGN_PREFIX" --with-threads
-sgn_carefully sgn_builddir sgn_byuser make -j 2
+sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS
 sgn_carefully sgn_make_install
 
 sgn_carefully sgn_cleanup

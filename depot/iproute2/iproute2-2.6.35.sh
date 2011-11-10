@@ -17,7 +17,7 @@ if [ -z $_ESCAPED_PREFIX ]; then
 fi
 sgn_carefully sgn_builddir sgn_byuser sed -i "1s/\\(DESTDIR=\\).*/\\1${_ESCAPED_PREFIX}/" Makefile
 
-sgn_carefully sgn_builddir sgn_byuser make -j 2
+sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS
 sgn_carefully sgn_builddir sgn_make_install
 
 sgn_carefully sgn_cleanup

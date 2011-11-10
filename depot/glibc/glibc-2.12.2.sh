@@ -22,7 +22,8 @@ sgn_carefully cd "glibc-build"
 #sgn_carefully sgn_byuser_script "echo \"CFLAGS += -march=i486 -U_FORTIFY_SOURCE -O2 -fno-stack-protector\" > configparms"
 sgn_carefully sgn_byuser_script "echo \"CFLAGS += -U_FORTIFY_SOURCE -O2 -fno-stack-protector\" > configparms"
 sgn_carefully sgn_byuser_script "../glibc-2.12.2/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-headers=\"$SGN_PREFIX/include\" --with-binutils=\"$SGN_PREFIX/bin\" libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
-sgn_carefully sgn_byuser make -j 2
+sgn_carefully sgn_builddir sgn_byuser_script "patch elf/dynamic-link.h < \"$SGN_HOME/depot/glibc/glibc-2.14.1_rpath.patch\""
+sgn_carefully sgn_byuser make $SGN_MAKEFLAGS
 
 sgn_carefully sgn_install_begin
 sgn_carefully mkdir -p "$SGN_PREFIX/etc"

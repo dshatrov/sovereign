@@ -9,7 +9,7 @@ sgn_carefully sgn_untar_gz
 
 sgn_carefully sgn_builddir sgn_byuser cp "$SGN_SRC_DIR/$PACKAGE_NAME/config_$PACKAGE_VERNAME" "./.config"
 sgn_carefully sgn_builddir sgn_byuser make oldnoconfig
-sgn_carefully sgn_builddir sgn_byuser make -j 2
+sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS
 
 sgn_carefully sgn_install_begin
 sgn_carefully sgn_builddir make modules_install INSTALL_MOD_PATH="$SGN_PREFIX"
