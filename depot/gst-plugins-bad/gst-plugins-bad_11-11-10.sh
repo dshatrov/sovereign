@@ -6,6 +6,10 @@ PACKAGE_DIR="${PACKAGE_VERNAME}"
 
 sgn_carefully sgn_untar_gz
 
+sgn_carefully sgn_builddir sgn_byuser sh -c "cat configure | sed 's/opencv <= 2.2.0//g' > configure.new"
+sgn_carefully sgn_builddir sgn_byuser mv configure.new configure
+sgn_carefully sgn_builddir sgn_byuser chmod a+x configure
+
 sgn_carefully sgn_builddir sgn_byuser ./configure --prefix="$SGN_PREFIX" --disable-examples --disable-librfb --enable-opencv
 sgn_carefully sgn_builddir sgn_byuser make $SGN_MAKEFLAGS
 sgn_carefully sgn_make_install

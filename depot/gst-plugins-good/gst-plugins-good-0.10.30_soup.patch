@@ -1,0 +1,52 @@
+diff -ur gst-plugins-good-0.10.30_/ext/soup/gstsouphttpsrc.c gst-plugins-good-0.10.30/ext/soup/gstsouphttpsrc.c
+--- gst-plugins-good-0.10.30_/ext/soup/gstsouphttpsrc.c	2011-06-14 17:44:20.000000000 +0400
++++ gst-plugins-good-0.10.30/ext/soup/gstsouphttpsrc.c	2011-11-14 19:07:21.190083971 +0400
+@@ -351,6 +351,7 @@
+   src->iradio_mode = FALSE;
+   src->loop = NULL;
+   src->context = NULL;
++  src->dummy_context = NULL;
+   src->session = NULL;
+   src->msg = NULL;
+   proxy = g_getenv ("http_proxy");
+@@ -1251,13 +1252,16 @@
+     return FALSE;
+   }
+ 
+-  src->context = g_main_context_new ();
++  src->dummy_context = g_main_context_new ();
++  src->context = g_main_context_default ();
++  g_main_context_ref (src->context);
+ 
+-  src->loop = g_main_loop_new (src->context, TRUE);
++  src->loop = g_main_loop_new (src->dummy_context, TRUE);
+   if (!src->loop) {
+     GST_ELEMENT_ERROR (src, LIBRARY, INIT,
+         (NULL), ("Failed to start GMainLoop"));
+     g_main_context_unref (src->context);
++    g_main_context_unref (src->dummy_context);
+     return FALSE;
+   }
+ 
+@@ -1300,8 +1304,10 @@
+   if (src->loop) {
+     g_main_loop_unref (src->loop);
+     g_main_context_unref (src->context);
++    g_main_context_unref (src->dummy_context);
+     src->loop = NULL;
+     src->context = NULL;
++    src->dummy_context = NULL;
+   }
+   if (src->extra_headers) {
+     gst_structure_free (src->extra_headers);
+diff -ur gst-plugins-good-0.10.30_/ext/soup/gstsouphttpsrc.h gst-plugins-good-0.10.30/ext/soup/gstsouphttpsrc.h
+--- gst-plugins-good-0.10.30_/ext/soup/gstsouphttpsrc.h	2011-06-14 03:24:10.000000000 +0400
++++ gst-plugins-good-0.10.30/ext/soup/gstsouphttpsrc.h	2011-11-14 19:05:17.810083988 +0400
+@@ -58,6 +58,7 @@
+   gchar *proxy_pw;             /* Authentication user password for proxy URI. */
+   gchar **cookies;             /* HTTP request cookies. */
+   GMainContext *context;       /* I/O context. */
++  GMainContext *dummy_context;
+   GMainLoop *loop;             /* Event loop. */
+   SoupSession *session;        /* Async context. */
+   GstSoupHTTPSrcSessionIOStatus session_io_status;

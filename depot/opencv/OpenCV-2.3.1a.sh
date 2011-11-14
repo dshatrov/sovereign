@@ -6,6 +6,8 @@ PACKAGE_DIR="OpenCV-2.3.1"
 
 sgn_carefully sgn_untar_bz2
 
+sgn_carefully sgn_builddir sgn_byuser sh -c "patch -p1 <  \"$SGN_HOME/depot/opencv/OpenCV-2.3.1_ushort.patch\""
+
 #sgn_carefully sgn_builddir sgn_byuser cmake -DCMAKE_PREFIX_PATH=$SGN_PREFIX -DCMAKE_INSTALL_PREFIX=$SGN_PREFIX .
 
 sgn_carefully sgn_builddir sgn_byuser cmake	\

@@ -11,5 +11,8 @@ glibc			http://www.linuxfromscratch.org/patches/downloads/glibc/glibc-2.12.2-gcc
 
 zlib			http://www.zlib.net/zlib-1.2.5.tar.gz
 
-glib			http://ftp.gnome.org/pub/gnome/sources/glib/2.28/glib-2.28.8.tar.bz2
+libffi			ftp://sourceware.org/pub/libffi/libffi-3.0.10.tar.gz
+
+#glib			http://ftp.gnome.org/pub/gnome/sources/glib/2.28/glib-2.28.8.tar.bz2
+glib			http://ftp.acc.umu.se/pub/gnome/sources/glib/2.30/glib-2.30.2.tar.bz2
 
