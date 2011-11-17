@@ -1,0 +1,49 @@
+diff -ur libsoup/libsoup/soup-socket.c libsoup_new/libsoup/soup-socket.c
+--- libsoup/libsoup/soup-socket.c	2011-11-12 16:57:51.000000000 +0400
++++ libsoup_new/libsoup/soup-socket.c	2011-11-16 02:22:13.583630395 +0400
+@@ -679,9 +679,6 @@
+ 	GSocketConnection *conn;
+ 	guint status;
+ 
+-	if (priv->async_context && !priv->use_thread_context)
+-		g_main_context_pop_thread_default (priv->async_context);
+-
+ 	conn = g_socket_client_connect_finish (G_SOCKET_CLIENT (client),
+ 					       result, &error);
+ 	status = socket_connected (sacd->sock, conn, error);
+@@ -736,6 +733,10 @@
+ 				       priv->connect_cancel,
+ 				       async_connected, sacd);
+ 	g_object_unref (client);
++
++	if (priv->async_context && !priv->use_thread_context)
++		g_main_context_pop_thread_default (priv->async_context);
++
+ }
+ 
+ /**
+@@ -1057,9 +1058,6 @@
+ 	GError *error = NULL;
+ 	guint status;
+ 
+-	if (priv->async_context && !priv->use_thread_context)
+-		g_main_context_pop_thread_default (priv->async_context);
+-
+ 	if (g_tls_connection_handshake_finish (G_TLS_CONNECTION (priv->conn),
+ 					       result, &error))
+ 		status = SOUP_STATUS_OK;
+@@ -1093,10 +1091,14 @@
+ 
+ 	if (priv->async_context && !priv->use_thread_context)
+ 		g_main_context_push_thread_default (priv->async_context);
++
+ 	g_tls_connection_handshake_async (G_TLS_CONNECTION (priv->conn),
+ 					  G_PRIORITY_DEFAULT,
+ 					  cancellable, handshake_async_ready,
+ 					  data);
++
++	if (priv->async_context && !priv->use_thread_context)
++		g_main_context_pop_thread_default (priv->async_context);
+ }
+ 
+ /**
