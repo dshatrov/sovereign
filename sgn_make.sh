@@ -9,6 +9,9 @@ fi
 SGN_ALTERNATE_PREFIX="$2"
 SGN_PACKAGE_SUFFIX="$3"
 
+echo "sgn_make SGN_ALTERNATE_PREFIX: $SGN_ALTERNATE_PREFIX"
+echo "sgn_make SGN_PACKAGE_SUFFIX: $SGN_PACKAGE_SUFFIX"
+
 if [ -z "$SGN_HOME" ]; then
     echo "SGN_HOME not set"
     exit 1

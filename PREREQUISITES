@@ -5,3 +5,7 @@ system, otherwise glibc build will fail.
 
 gettext is required to build xlib
 
+glib-networking requires intltool
+
+gstreamer needs bison, flex
+

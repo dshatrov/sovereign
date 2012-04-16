@@ -21,7 +21,7 @@ sgn_carefully cd "glibc-build"
 
 #sgn_carefully sgn_byuser_script "echo \"CFLAGS += -march=i486 -g -O2\" > configparms"
 #sgn_carefully sgn_byuser_script "echo \"CFLAGS += -march=i486 -U_FORTIFY_SOURCE -O2 -fno-stack-protector\" > configparms"
-sgn_carefully sgn_byuser_script "echo \"CFLAGS += -U_FORTIFY_SOURCE -fno-stack-protector\" > configparms"
+sgn_carefully sgn_byuser_script "echo \"CFLAGS += -U_FORTIFY_SOURCE -fno-stack-protector -O3\" > configparms"
 #sgn_carefully sgn_byuser_script "../$PACKAGE_VERNAME/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-headers=\"$SGN_PREFIX/include\" --with-binutils=\"$SGN_PREFIX/bin\" libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
 # NOTE: Using system headers to build moment-0.2. This isn't good for livecd builds.
 sgn_carefully sgn_byuser_script "../$PACKAGE_VERNAME/configure --prefix=\"$SGN_PREFIX\" --disable-profile --enable-add-ons --enable-kernel=2.6.0 --without-selinux --with-binutils=\"$SGN_PREFIX/bin\" libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"

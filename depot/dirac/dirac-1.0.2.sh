@@ -6,7 +6,7 @@ PACKAGE_DIR="${PACKAGE_VERNAME}"
 
 sgn_carefully sgn_untar_gz
 
-sgn_carefully sgn_builddir sgn_byuser sh -c "cat configure | sed 's/-pedantic//' > configure.new"
+sgn_carefully sgn_builddir sgn_byuser sh -c "cat configure | sed 's/-pedantic//' | sed 's/-Werror//' > configure.new"
 
 sgn_carefully sgn_builddir sgn_byuser_script "patch libdirac_encoder/quant_chooser.cpp < \"$SGN_HOME/depot/$PACKAGE_NAME/${PACKAGE_VERNAME}_stl.patch\""
 
