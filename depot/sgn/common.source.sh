@@ -155,12 +155,17 @@ fi
 
 umask 022
 export LC_ALL=POSIX
+echo "PATH BEFORE: $PATH"
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 if [ ! -z "$SGN_EXTRA_PATH" ]; then
+    echo "Extra path: $SGN_EXTRA_PATH"
     export PATH="$SGN_EXTRA_PATH:$PATH"
 fi
+echo "SGN_ORIGINAL_PREFIX: $SGN_ORIGINAL_PREFIX"
+echo "SGN_ALTERNATE_PREFIX: $SGN_ALTERNATE_PREFIX"
 export PATH="$SGN_ORIGINAL_PREFIX/sbin:$SGN_ORIGINAL_PREFIX/bin:$PATH"
 if [ ! -z "$SGN_ALTERNATE_PREFIX" ]; then
+    echo "Alternate prefix: $SGN_ALTERNATE_PREFIX"
     export PATH="$SGN_ALTERNATE_PREFIX/sbin:$SGN_ALTERNATE_PREFIX/bin:$PATH"
 fi
 echo "PATH: $PATH"
@@ -196,13 +201,35 @@ sgn_cleanup_dir "$SGN_EMPTY"
 #SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
 
 # 64bit
-#SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
 # 32bit
-SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+#SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+
+#export CC=gcc-4.5
+#export CXX=g++-4.5
 
 export CFLAGS="$CFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -ggdb"
 export CXXFLAGS="$CXXFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -ggdb"
 export LDFLAGS="$LDFLAGS -L$SGN_PREFIX/lib $SGN_LDFLAGS"
+
+# *** HOST DETECTION ***
+#
+#  SGN_HOST_GUESS=`"$SGN_HOME/depot/sgn/config.guess"`
+#  SGN_HOST=`"$SGN_HOME/depot/sgn/config.sub" "$SGN_HOST_GUESS"`
+#
+#  case "$host" in
+#    *-*-cygwin*)
+#      SGN_PLATFORM_CYGWIN=yes
+#      ;;
+#    *-*-mingw*|*-*-cygwin*)
+#      SGN_PLATFORM_WIN32=yes
+#      ;;
+#    *)
+#      SGN_PLATFORM_DEFAULT=yes
+#      ;;
+#  esac
+#
+# *** (END OF HOST DETECTION) ***
 
 # *** (SCRIPT ENDS HERE) ***
 
@@ -314,6 +341,18 @@ sgn_unarchive_check_variables ()
 	echo "sgn_unarchive_check_variables: \$PACKAGE_ARCHIVE is not set"
 	exit 1
     fi
+}
+
+sgn_untar_ ()
+{
+    local _ARCHIVE="$1"
+
+    if [ -z "$_ARCHIVE" ]; then
+	local _ARCHIVE="$PACKAGE_NAME/$PACKAGE_ARCHIVE"
+    fi
+
+    sgn_carefully sgn_unarchive_check_variables
+    sgn_carefully sgn_untar "tar xf" "$PACKAGE_DIR" "$_ARCHIVE"
 }
 
 sgn_untar_gz ()
