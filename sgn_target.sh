@@ -89,7 +89,11 @@ cat "$SGN_TARGET" |
 	    ;;
 	install)
 	    if ! sgn_test_flag "$SGN_FLAGS" "script"; then
+              if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
 		sgn_carefully ./sgn_install.sh "$SGN_SGN_DIR/$SGN_VERSION.sgn"
+              else
+                echo "INSTALL: NO-OP"
+              fi
 	    else
 		sgn_carefully ./sgn_make.sh "depot/$SGN_NAME/$SGN_VERSION.sh"
 	    fi
@@ -97,7 +101,11 @@ cat "$SGN_TARGET" |
 	make_install)
 	    sgn_carefully ./sgn_make.sh "depot/$SGN_NAME/$SGN_VERSION.sh"
 	    if ! sgn_test_flag "$SGN_FLAGS" "script"; then
+              if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
 		sgn_carefully ./sgn_install.sh "$SGN_SGN_DIR/$SGN_VERSION.sgn"
+              else
+                echo "INSTALL: NO-OP"
+              fi
 	    fi
 	    ;;
 	make_install_livecd)

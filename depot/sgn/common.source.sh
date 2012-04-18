@@ -64,7 +64,11 @@ sgn_byuser_script ()
 	exit 1
     fi
 
-    su "$SGN_USER" -m -c "export PATH=$PATH; $1"
+    if [ `id -un` = "$SGN_USER" ]; then
+	"$@"
+    else
+        su "$SGN_USER" -m -c "export PATH=$PATH; $1"
+    fi
 }
 
 sgn_cleanup_dir ()
@@ -161,6 +165,10 @@ if [ ! -z "$SGN_EXTRA_PATH" ]; then
     echo "Extra path: $SGN_EXTRA_PATH"
     export PATH="$SGN_EXTRA_PATH:$PATH"
 fi
+if [ ! -z "$SGN_EXTRA_TAIL_PATH" ]; then
+    echo "Extra tail path: $SGN_EXTRA_TAIL_PATH"
+    export PATH="$PATH:$SGN_EXTRA_TAIL_PATH"
+fi
 echo "SGN_ORIGINAL_PREFIX: $SGN_ORIGINAL_PREFIX"
 echo "SGN_ALTERNATE_PREFIX: $SGN_ALTERNATE_PREFIX"
 export PATH="$SGN_ORIGINAL_PREFIX/sbin:$SGN_ORIGINAL_PREFIX/bin:$PATH"
@@ -171,6 +179,28 @@ fi
 echo "PATH: $PATH"
 
 # (End of bashrc)
+
+# *** HOST DETECTION ***
+
+  echo "Running config.guess ..."
+  SGN_HOST_GUESS=`"$SGN_HOME/depot/sgn/config.guess"`
+  echo "Running config.sub ..."
+  SGN_HOST=`"$SGN_HOME/depot/sgn/config.sub" "$SGN_HOST_GUESS"`
+
+  echo "SGN_HOST: $SGN_HOST"
+  case "$SGN_HOST" in
+    *-*-cygwin*)
+      SGN_PLATFORM_CYGWIN=yes
+      ;;
+    *-*-mingw*)
+      SGN_PLATFORM_WIN32=yes
+      ;;
+    *)
+      SGN_PLATFORM_DEFAULT=yes
+      ;;
+  esac
+
+# *** (END OF HOST DETECTION) ***
 
 sgn_ensure_directory_superuser "SGN_PREFIX"
 sgn_ensure_directory_superuser "SGN_LIVECD_PREFIX"
@@ -189,21 +219,23 @@ sgn_ensure_directory "SGN_EMPTY"
 
 sgn_cleanup_dir "$SGN_EMPTY"
 
-# 32bit
-#SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
-#SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
+if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
+  # 32bit
+  #SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
+  #SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib"
 
-# 64bit
-#SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath='$ORIGIN/../lib'"
-#SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
-#SGN_LDFLAGS="-Wl,-rpath=$SGN_PREFIX/lib"
+  # 64bit
+  #SGN_COMMON_CFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath='$ORIGIN/../lib'"
+  #SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+  #SGN_LDFLAGS="-Wl,-rpath=$SGN_PREFIX/lib"
 
-#SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+  #SGN_LDFLAGS="-Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
 
-# 64bit
-SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
-# 32bit
-#SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+  # 64bit
+  SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+  # 32bit
+  #SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux.so.2 -Wl,-L$SGN_PREFIX/lib -Wl,-rpath=$SGN_PREFIX/lib"
+fi
 
 #export CC=gcc-4.5
 #export CXX=g++-4.5
@@ -211,25 +243,6 @@ SGN_LDFLAGS="-Wl,--dynamic-linker=$SGN_PREFIX/lib/ld-linux-x86-64.so.2 -Wl,-L$SG
 export CFLAGS="$CFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -ggdb"
 export CXXFLAGS="$CXXFLAGS -I$SGN_PREFIX/include $SGN_COMMON_CFLAGS -ggdb"
 export LDFLAGS="$LDFLAGS -L$SGN_PREFIX/lib $SGN_LDFLAGS"
-
-# *** HOST DETECTION ***
-#
-#  SGN_HOST_GUESS=`"$SGN_HOME/depot/sgn/config.guess"`
-#  SGN_HOST=`"$SGN_HOME/depot/sgn/config.sub" "$SGN_HOST_GUESS"`
-#
-#  case "$host" in
-#    *-*-cygwin*)
-#      SGN_PLATFORM_CYGWIN=yes
-#      ;;
-#    *-*-mingw*|*-*-cygwin*)
-#      SGN_PLATFORM_WIN32=yes
-#      ;;
-#    *)
-#      SGN_PLATFORM_DEFAULT=yes
-#      ;;
-#  esac
-#
-# *** (END OF HOST DETECTION) ***
 
 # *** (SCRIPT ENDS HERE) ***
 
@@ -247,12 +260,14 @@ MOUNT="env LD_RUN_PATH=/lib:/usr/lib LD_LIBRARY_PATH=/lib:/usr/lib /bin/mount"
 
 # TODO Sleep here?
 sgn_umount_all () {
+  if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
 # 'fusermount 'somewhy fails with "device is busy". Works fine with 'umount'.
 #    while fusermount -u "$SGN_SYSTEM" > /dev/null 2>&1; do true; done
     while $UMOUNT "$SGN_PREFIX"        > /dev/null 2>&1; do true; done
 
     while $UMOUNT "$SGN_EMPTY"         > /dev/null 2>&1; do true; done
     while $UMOUNT "$SGN_PREFIX"        > /dev/null 2>&1; do true; done
+  fi
 }
 
 sgn_setenv () {
@@ -407,6 +422,7 @@ sgn_install_cleanup ()
 
 sgn_install_begin_nocleanup ()
 {
+  if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
     sgn_umount_all
 
     sgn_carefully $MOUNT --bind "$SGN_PREFIX" "$SGN_SYSTEM"
@@ -417,6 +433,7 @@ sgn_install_begin_nocleanup ()
 	sgn_carefully modprobe fuse
 	sgn_carefully sgn_mount_unionfs_unsafe
     fi
+  fi
 }
 
 sgn_install_begin ()
@@ -427,6 +444,7 @@ sgn_install_begin ()
 
 sgn_install_end_nocleanup ()
 {
+  if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
     echo "sgn/install_end.sh: sleeping 3 seconds..."
     sleep 3
 
@@ -471,6 +489,7 @@ sgn_install_end_nocleanup ()
 
     # Calling sgn_umount_all just to be sure that we're in the clear.
     sgn_umount_all
+  fi # SGN_PLATFORM_DEFAULT
 }
 
 sgn_install_end ()
@@ -481,6 +500,7 @@ sgn_install_end ()
 
 sgn_prepare_package ()
 {
+  if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
     local _PKG_NAME="$1"
 
     if [ -z "$_PKG_NAME" ]; then
@@ -490,6 +510,7 @@ sgn_prepare_package ()
     sgn_carefully pushd "$SGN_INSTALL"
     sgn_carefully tar czf "$SGN_SGN_DIR/${_PKG_NAME}${SGN_PACKAGE_SUFFIX}.sgn" *
     sgn_carefully popd
+  fi
 }
 
 sgn_make_install ()
@@ -515,6 +536,8 @@ sgn_finstat ()
 
     echo
     echo "Okay! :)"
-    du -sh "$SGN_SGN_DIR/${_PKG_NAME}${SGN_PACKAGE_SUFFIX}.sgn"
+    if test "x$SGN_PLATFORM_DEFAULT" = "xyes"; then
+      du -sh "$SGN_SGN_DIR/${_PKG_NAME}${SGN_PACKAGE_SUFFIX}.sgn"
+    fi
 }
 

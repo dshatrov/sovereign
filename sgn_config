@@ -3,12 +3,13 @@ SGN_LIVECD_PREFIX="/opt/sgn_livecd"
 
 SGN_USER=erdizz
 
-SGN_EXTRA_PATH="/home/$SGN_USER/mync/sbin:/home/$SGN_USER/mync/bin:/opt/mync/sbin:/opt/mync/bin:/opt/sgn/sbin:/opt/sgn/bin"
+SGN_EXTRA_PATH="/home/$SGN_USER/mync/sbin:/home/$SGN_USER/mync/bin:/opt/mync/sbin:/opt/mync/bin:/opt/sgn/sbin:/opt/sgn/bin:/mingw/bin"
+SGN_EXTRA_TAIL_PATH="/c/Windows/system32:/c/Windows"
 
 SGN_SRC_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_src"
 SGN_BUILD_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/build"
 SGN_SGN_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/sgn_packages"
 SGN_LIVECD_DIR="/home/$SGN_USER/files/sgn_dev/sovereign_build/livecd"
 
-SGN_MAKEFLAGS="-j8"
+SGN_MAKEFLAGS="-j4"
 
