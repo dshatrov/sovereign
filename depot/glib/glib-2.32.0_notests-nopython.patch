@@ -1,0 +1,61 @@
+diff -urN glib-2.32.0_orig/Makefile.in glib-2.32.0/Makefile.in
+--- glib-2.32.0_orig/Makefile.in	2012-03-24 07:02:46 +0400
++++ glib-2.32.0/Makefile.in	2012-04-18 11:53:05 +0400
+@@ -425,7 +425,7 @@
+ 	gio-windows-2.0.pc.in
+ TEST_PROGS = 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs # tests
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
+diff -urN glib-2.32.0_orig/gio/Makefile.in glib-2.32.0/gio/Makefile.in
+--- glib-2.32.0_orig/gio/Makefile.in	2012-03-24 07:02:43 +0400
++++ glib-2.32.0/gio/Makefile.in	2012-04-18 11:53:58 +0400
+@@ -479,7 +479,7 @@
+ CTAGS = ctags
+ am__tty_colors = \
+ red=; grn=; lgn=; blu=; std=
+-DIST_SUBDIRS = gdbus-2.0/codegen xdgmime inotify fen win32 . fam tests
++DIST_SUBDIRS = xdgmime inotify fen win32 . fam # tests gdbus-2.0/codegen
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ am__relativize = \
+   dir0=`pwd`; \
+@@ -754,8 +754,8 @@
+ 	$(NULL) $(completion_DATA)
+ TEST_PROGS = 
+ NULL = 
+-SUBDIRS = gdbus-2.0/codegen $(am__append_1) $(am__append_5) \
+-	$(am__append_9) $(am__append_12) . $(am__append_15) tests
++SUBDIRS = $(am__append_1) $(am__append_5) \
++	$(am__append_9) $(am__append_12) . $(am__append_15) # tests gdbus-2.0/codegen
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@noinst_DATA = gio-2.0.lib
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@install_ms_lib_cmd = $(INSTALL) gio-2.0.lib $(DESTDIR)$(libdir)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@uninstall_ms_lib_cmd = -rm $(DESTDIR)$(libdir)/gio-2.0.lib
+diff -urN glib-2.32.0_orig/glib/Makefile.in glib-2.32.0/glib/Makefile.in
+--- glib-2.32.0_orig/glib/Makefile.in	2012-03-24 07:02:44 +0400
++++ glib-2.32.0/glib/Makefile.in	2012-04-18 11:53:05 +0400
+@@ -554,8 +554,8 @@
+ @HAVE_GOOD_PRINTF_FALSE@PRINTF_SUBDIR = gnulib
+ @HAVE_GOOD_PRINTF_FALSE@printf_la = gnulib/libgnulib.la
+ @USE_SYSTEM_PCRE_FALSE@MAYBE_PCRE = pcre 
+-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
+-DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . # tests
++DIST_SUBDIRS = libcharset gnulib pcre update-pcre # tests
+ AM_CPPFLAGS = \
+ 	$(glib_INCLUDES) 		\
+ 	$(pcre_inc) 			\
+diff -urN glib-2.32.0_orig/gobject/Makefile.in glib-2.32.0/gobject/Makefile.in
+--- glib-2.32.0_orig/gobject/Makefile.in	2012-03-24 07:02:45 +0400
++++ glib-2.32.0/gobject/Makefile.in	2012-04-18 11:53:05 +0400
+@@ -464,7 +464,7 @@
+ # GObject - GLib Type, Object, Parameter and Signal Library
+ # Copyright (C) 1997,98,99,2000 Tim Janik and Red Hat, Inc.
+ #
+-SUBDIRS = . tests
++SUBDIRS = . # tests
+ BUILT_SOURCES = $(am__append_1)
+ CLEANFILES = $(am__append_2) gobject-public-headers.txt $(gen_sources) \
+ 	libgobject-gdb.py

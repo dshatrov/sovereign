@@ -1,0 +1,11 @@
+--- glib_/glib/gatomic.h	2012-03-12 04:42:41.000000000 +0400
++++ glib-2.32.0/glib/gatomic.h	2012-04-10 17:12:08.963002724 +0400
+@@ -62,7 +62,7 @@
+ gsize                   g_atomic_pointer_xor                  (volatile void  *atomic,
+                                                                gsize           val);
+ 
+-GLIB_DEPRECATED_IN_2_30_FOR(g_atomic_add)
++//GLIB_DEPRECATED_IN_2_30_FOR(g_atomic_add)
+ gint                    g_atomic_int_exchange_and_add         (volatile gint  *atomic,
+                                                                gint            val);
+ 

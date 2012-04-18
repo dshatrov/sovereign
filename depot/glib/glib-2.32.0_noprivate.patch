@@ -1,0 +1,12 @@
+diff -urN glib-2.32.0_orig/glib/glib.symbols glib-2.32.0/glib/glib.symbols
+--- glib-2.32.0_orig/glib/glib.symbols	2012-03-12 04:42:41 +0400
++++ glib-2.32.0/glib/glib.symbols	2012-04-18 21:43:13 +0400
+@@ -1596,7 +1596,7 @@
+ #endif
+ g_win32_get_package_installation_directory_utf8
+ #ifndef _WIN64
+-g_win32_get_package_installation_subdirectory PRIVATE
++g_win32_get_package_installation_subdirectory
+ #endif
+ g_win32_get_package_installation_subdirectory_utf8
+ g_win32_get_windows_version
